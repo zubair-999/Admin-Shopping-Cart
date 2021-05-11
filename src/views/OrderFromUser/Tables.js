@@ -1,59 +1,66 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {
   CBadge,
   CCard,
   CCardBody,
   CCardHeader,
-  CCol,
   CDataTable,
-  CRow
 } from '@coreui/react'
-import { DocsLink } from 'src/reusable'
+import {useDispatch, useSelector} from "react-redux";
+import {OrderFromUserAction} from "../../redux/actions/OrderFromUserAction";
+import {Link} from "react-router-dom";
 
-import usersData from '../users/UsersData'
-
-const getBadge = status => {
-  switch (status) {
-    case 'complete': return 'success'
-    case 'in_progress': return 'warning'
-    case 'cancel': return 'danger'
+const getBadge = order_status => {
+  switch (order_status) {
+    case 'Completed': return 'success'
+    case 'Delivered': return 'primary'
+    case 'In progress': return 'secondary'
+    case 'Cancel': return 'danger'
+    case 'Not operating in this region': return 'warning'
     default: return 'primary'
   }
 }
-const fields = ['Order ID', 'status']
+const fields = ['_id', 'order_status']
 
 const OrderFromUser = () => {
+  const dispatch = useDispatch()
+  const OrderFromUser = useSelector(state => state.OrderFromUser)
+  const {orderFromUser} = OrderFromUser
+  useEffect(() => {
+    dispatch(OrderFromUserAction())
+  },[dispatch])
   return (
     <>
-      <CRow>
-        <CCol xs="12" lg="6">
           <CCard>
             <CCardHeader>
               Order From User
-              <DocsLink name="CModal"/>
             </CCardHeader>
             <CCardBody>
             <CDataTable
-              items={usersData}
+              items={orderFromUser}
               fields={fields}
               itemsPerPage={5}
               pagination
               scopedSlots = {{
-                'status':
+                'order_status':
                   (item)=>(
                     <td>
-                      <CBadge color={getBadge(item.status)}>
-                        {item.status}
+                      <CBadge color={getBadge(item.order_status)} >
+                        {item.order_status}
                       </CBadge>
+                      <Link to={`/order/order-detail/${item._id}`}>
+                        <CBadge style={{color:'black', float:'right'}} >
+                          Details
+                        </CBadge>
+                      </Link>
                     </td>
+
                   )
 
               }}
             />
             </CCardBody>
           </CCard>
-        </CCol>
-      </CRow>
     </>
   )
 }

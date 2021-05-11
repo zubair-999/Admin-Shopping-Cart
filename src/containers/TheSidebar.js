@@ -19,7 +19,7 @@ import navigation from './_nav'
 
 const TheSidebar = () => {
   const dispatch = useDispatch()
-  const show = useSelector(state => state.sidebarShow)
+  const show = useSelector(state => state.nav.sidebarShow)
 
   return (
     <CSidebar
@@ -29,13 +29,13 @@ const TheSidebar = () => {
       <CSidebarBrand className="d-md-down-none" to="/">
         <CIcon
           className="c-sidebar-brand-full"
-          name="logo-negative"
+          name="cilCart"
           height={35}
         />
         <CIcon
           className="c-sidebar-brand-minimized"
-          name="sygnet"
-          height={35}
+          name="cilCart"
+          height={25}
         />
       </CSidebarBrand>
       <CSidebarNav>
